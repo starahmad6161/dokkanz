@@ -145,6 +145,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "dokkanz"
+    }
+  },
+  "defaultProject": "dokkanz",
+  "cli": {
+    "analytics": "7cd0ee13-47c9-4f8f-b192-239f7d5251fd"
+  }
 }

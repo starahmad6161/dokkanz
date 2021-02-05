@@ -1,0 +1,72 @@
+
+<div class="top-content">
+  <div class="container d-flex">
+    <h2 class="title"> <span class="pointer" routerLink="/">Home</span> / {{ categoryNames[0] }} <span>/ {{ categoryNames[1] }}</span></h2>
+    <button class="btn btn-primary pointer" (click)="openPopup()">Add New Product</button>
+  </div>
+</div>
+<!--Start Delete Button-->
+<div class="container text-right" *ngIf="deleteItemsList.length > 0">
+  <button class="btn btn-danger pointer" (click)="deleteProducts()">Delete Selected Item</button>
+  <hr>
+</div>
+<!--End Delete Button-->
+<div class="category-details">
+  <div class="container">
+    <!--If there is no products-->
+    <div class="info-msg" *ngIf="products.length == 0">
+      No Products yet!
+    </div>
+    <!--Products List-->
+    <div class="row">
+      <div class="col-4" *ngFor="let product of products; trackBy:trackBy">
+        <div class="box">
+          <!--action-buttons-->
+          <div class="action-btns d-flex">
+            <button class="edit-btn pointer" (click)="openPopup(true, product.id)">Edit</button>
+            <input class="checkbox pointer" type="checkbox" (click)="addToDeleteList($event, product.id)">
+          </div>
+          <!--Card Image-->
+          <div class="card-img">
+            <img class="obj-cover" src="https://via.placeholder.com/200" alt="image">
+          </div>
+          <!--Card Body-->
+          <div class="card-body">
+            <div class="code">Code: {{product.id}}</div>
+            <div class="d-flex">
+              <h3 class="product-name">{{ product.name | slice: 0: 20 }}...</h3>
+              <div class="price">{{ product.price | currency }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Start Pagination-->
+    <div class="pagination" *ngIf="products.length > 0">
+      <ul class="pages-list d-flex">
+        <li class="page-number pointer" *ngFor="let page of paginationNumbers" [class.active]="pageNumber == page" (click)="changePage(page)">{{ page }}</li>
+        <li class="page-number pointer active" *ngIf="paginationNumbers.length == 0">1</li>
+      </ul>
+    </div>
+    <!--End Pagination-->
+  </div>
+</div>
+<!--Start Popup-->
+<div class="popup d-flex" *ngIf="popupIsOpen">
+  <div class="box">
+    <div class="close pointer" (click)="closePopup()">X</div>
+    <div class="inner-content">
+      <!--Start Form-->
+      <form [formGroup]="addProductForm" #ngForm="ngForm" (ngSubmit)="addNewProduct()">
+        <input class="form-control" formControlName="productName" [class.is-invalid]="(ngForm.submitted || productName.touched) && productName.invalid" type="text" placeholder="Product Name">
+        <input class="form-control" formControlName="productPrice" [class.is-invalid]="(ngForm.submitted || productPrice.touched) && productPrice.invalid" type="number" placeholder="Product Price">
+        <div class="text-right">
+          <button class="btn-primary pointer" [disabled]="ngForm.invalid" *ngIf="!isEditMode">Add</button>
+          <button class="btn-success pointer" [disabled]="ngForm.invalid" type="button" (click)="save()" *ngIf="isEditMode">Save</button>
+        </div>
+      </form>
+      <!--End Form-->
+    </div>
+  </div>
+</div>
+<!--End Popup-->

@@ -1,0 +1,49 @@
+
+<div class="top-content">
+  <div class="container d-flex">
+    <h2 class="title">All Categories</h2>
+    <button class="btn btn-primary pointer" (click)="popupIsOpen = true">Add New Category</button>  </div>
+</div>
+<!--All Categories-->
+<div class="categories">
+  <div class="container">
+    <div class="info-msg" *ngIf="rootCatsItems.length == 0">
+      No Categories yet!
+    </div>
+    <div class="row">
+      <!--Root Category-->
+      <div class="col-4" *ngFor="let rootCat of rootCatsItems; trackBy:trackBy">
+        <div class="box">
+          <div class="box-head">{{ rootCat.name }}</div>
+          <div class="box-body">
+            <!--Nested Categories-->
+            <ul class="list-items" *ngIf="rootCat?.subCategories">
+              <li class="list-item" *ngFor="let subCat of rootCat?.subCategories">
+                <a class="item-link" [routerLink]="['/category', rootCat.id, subCat.id]">{{ subCat.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Start Popup-->
+<div class="popup d-flex" *ngIf="popupIsOpen">
+  <div class="box">
+    <div class="close pointer" (click)="popupIsOpen = false">X</div>
+    <div class="inner-content">
+      <!--Form-->
+      <form [formGroup]="addCatForm" #ngForm="ngForm" (ngSubmit)="addNewCategory()">
+        <input formControlName="rootCatName" class="form-control" [class.is-invalid]="(ngForm.submitted || rootCatName.touched) && rootCatName.invalid" type="text" name="rootCatName" placeholder="Root Category Name">
+        <input formControlName="subCatName" class="form-control" [class.is-invalid]="(ngForm.submitted || subCatName.touched) && subCatName.invalid" type="text" name="subCatName" placeholder="Sub Category Name">
+        <div class="text-right">
+          <button class="btn-primary pointer" [disabled]="ngForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--End Popup-->
